@@ -13,15 +13,9 @@ class Corpus:
     def add(self, doc):
         if doc.auteur not in self.aut2id:
             self.naut += 1
-            self.authors[self.naut] = Author(doc.auteur,doc)
+            self.authors[self.naut] = Author(doc.auteur)
             self.aut2id[doc.auteur] = self.naut
-        else :
-            self.authors[self.aut2id[doc.auteur]].addDoc(doc)
+        self.authors[self.aut2id[doc.auteur]].add(doc.texte)
 
         self.ndoc += 1
         self.id2doc[self.ndoc] = doc
-    
-    def __str__(self):
-        print(self.nom + ": ")
-        for i in self.id2doc.values():
-            print(i)

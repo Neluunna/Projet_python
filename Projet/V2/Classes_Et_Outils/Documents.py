@@ -60,9 +60,9 @@ class RedditDocument(Document):
 
     # ToString()
     def __str__(self):
-        return f"{super().__str__()}; trouvé sur {self.type} dans le sub : {self.subreddit}"
+        return f"{super().__str__()}; trouvé sur {self.source} dans le sub : {self.subreddit}"
     def __repr__(self):
-        return f"{super().__repr__()}\tSource : {self.type}\tSubReddit : {self.subreddit}"
+        return f"{super().__repr__()}\tSource : {self.source}\tSubReddit : {self.subreddit}"
 
 class ArxivDocument(Document):
     def __init__ (self, titre="", auteur="", date="", url="", texte="", coAuteurs=""):
@@ -84,9 +84,8 @@ class ArxivDocument(Document):
 
     # ToString()
     def __str__(self):
-        return f"{super().__str__()} aidé par {self.coAuteurs}; trouvé sur {self.type} "
+        return f"{super().__str__()} aidé par {self.coAuteurs}; trouvé sur {self.source} "
     def __repr__(self):
-        return f"{super().__repr__()}\tSource: {self.type}\tCo-Auteurs: {self.coAuteurs} "
+        return f"{super().__repr__()}\tSource: {self.source}\tCo-Auteurs: {self.coAuteurs} "
     
 # =======================================================================
-
