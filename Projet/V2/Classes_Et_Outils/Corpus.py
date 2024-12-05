@@ -2,6 +2,8 @@ from .Author import Author
 from .Documents import Document, ArxivDocument, RedditDocument
 import re
 import pandas as pd
+import scipy as sp
+
 
 class Corpus:
     def __init__(self, nom):
@@ -89,10 +91,7 @@ class Corpus:
             mots = set(re.findall(r"\b\w[\w']*\b", texte))  # Utiliser un set pour ne pas compter plusieurs fois le même mot dans un même document
             
             # Mettre à jour le vocabulaire et compter les occurrences
-            for mot in mots:
-                # Ajouter le mot au vocabulaire
-                vocabulaire_set.add(mot)
-                
+            for mot in mots:                
                 # Compter l'occurrence du mot dans tous les documents (TF)
                 if mot in freq:
                     freq[mot] += 1
@@ -105,9 +104,6 @@ class Corpus:
                 else:
                     df[mot] = 1
         
-        # Convertir le set en un dictionnaire avec un ID unique pour chaque mot
-        vocabulaire = {mot: idx for idx, mot in enumerate(sorted(vocabulaire_set))}
-        
         # Créer un DataFrame pandas avec les fréquences des mots et la document frequency
         df_freq = pd.DataFrame(list(freq.items()), columns=['Mot', 'Fréquence'])
         df_df = pd.DataFrame(list(df.items()), columns=['Mot', 'Document Frequency'])
@@ -116,7 +112,7 @@ class Corpus:
         df_final = pd.merge(df_freq, df_df, on='Mot', how='left')
         
         # Trier le DataFrame par fréquence décroissante
-        df_final = df_final.sort_values(by='Fréquence', ascending=False).reset_index(drop=True)
+        df_final = df_final.sort_values(by='Fréquence', ascending=True).reset_index(drop=True)
         
         # Retourner le tableau des fréquences et des document frequencies
         return df_final
@@ -133,3 +129,39 @@ class Corpus:
         # Les n mots les plus fréquents
         print(f"\nLes {n} mots les plus fréquents :")
         print(cache.head(n))
+
+    def tf(self):
+        # Initialiser un vocabulaire pour les mots
+        vocab = {}
+        unique_id = 0
+    
+        # Parcourir les documents pour construire le vocabulaire
+        for word in sorted(self.textes_all.lower().split()):
+            if word not in vocab:
+                # Si le mot n'est pas dans le vocabulaire, lui attribuer un nouvel ID
+                vocab[word] = {
+                    'unique_id': unique_id,
+                    'total_occurrence': 1
+                }
+                unique_id += 1
+            else:
+                # Si le mot est déjà dans le vocabulaire, incrémenter son compteur d'occurrences
+                vocab[word]['total_occurrence'] += 1
+        
+        # Préparer les données pour la matrice TF
+        rows = []
+        cols = []
+        data = []
+        
+        # Parcourir les documents pour remplir les lignes et colonnes
+        for i, doc in enumerate(self.id2doc.values()):
+            for word in doc.__getTexte__().lower().split():
+                if word in vocab:
+                    rows.append(i)  
+                    cols.append(vocab[word]['unique_id']) 
+                    data.append(1) 
+        
+        tf_matrix = sp.sparse.csr_matrix((data, (rows, cols)), shape=(self.ndoc, len(vocab)))
+    
+        print("Matrice TF construite avec succès.")
+        return tf_matrix

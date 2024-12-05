@@ -19,7 +19,9 @@ CorpusV1.add(Doc3)
 
 CorpusV1.search("quantum")
 print(CorpusV1.concorde("and"))
-CorpusV1.stats()
+CorpusV1.stats(10)
+
+CorpusV1.tf()
 
 # Tests pour importations
 
