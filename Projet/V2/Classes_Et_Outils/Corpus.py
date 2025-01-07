@@ -3,7 +3,7 @@ from .Documents import Document, ArxivDocument, RedditDocument
 import re
 import pandas as pd
 import scipy as sp
-
+import numpy as np
 
 class Corpus:
     def __init__(self, nom):
@@ -163,5 +163,21 @@ class Corpus:
         
         tf_matrix = sp.sparse.csr_matrix((data, (rows, cols)), shape=(self.ndoc, len(vocab)))
     
-        print("Matrice TF construite avec succès.")
         return tf_matrix
+        
+    def idf(self):
+        n_docs= self.ndoc
+        # Nombre de documents contenant chaque terme
+        df = np.array((self.tf() > 0).sum(axis=0)).flatten()
+        
+        # Calcul de l'IDF
+        idf_values = np.log((n_docs + 1) / (df + 1)) + 1  # Évite log(0) avec le +1
+        
+        return idf_values
+    
+    def tfidf(self):
+        
+        # Normaliser la matrice TF par les poids IDF
+        tf_idf_matrix= self.tf().multiply(self.idf())
+
+        return sp.sparse.csr_matrix(tf_idf_matrix)

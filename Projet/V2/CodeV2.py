@@ -21,7 +21,10 @@ CorpusV1.search("quantum")
 print(CorpusV1.concorde("and"))
 CorpusV1.stats(10)
 
-CorpusV1.tf()
+print(CorpusV1.tf())
+print(CorpusV1.idf())
+print(CorpusV1.tfidf())
+
 
 # Tests pour importations
 
