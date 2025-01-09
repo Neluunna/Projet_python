@@ -52,10 +52,10 @@ def sauvegarder(Query,name="Imported", number= 50):
     print("processing: done")
     
     corpus_df['data']= corpus_df['data'].apply(lambda x: json.dumps(x))
-    corpus_df.to_csv('V1/Classes_Et_Outils/'+name+'.csv', sep='\t', index=False)
+    corpus_df.to_csv('V2/Classes_Et_Outils/'+name+'.csv', sep='\t', index=False)
     print("save : done")
 
-def corpusAddAll(Corpus, path="V1/Classes_Et_Outils/Imported"): 
+def corpusAddAll(Corpus, path="V2/Classes_Et_Outils/Imported"): 
     docs = panda.read_csv(path+'.csv', sep='\t', encoding='utf-8')
     docs['data'] = docs['data'].apply(lambda x: json.loads(x))
     
