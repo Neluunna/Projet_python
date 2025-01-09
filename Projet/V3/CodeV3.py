@@ -11,18 +11,20 @@ Doc1 = Document("Climate Change Impacts", "Alice Martin", "2022-11-20", "https:/
 Doc2 = ArxivDocument("Quantum Computing Basics", "Robert Brown", "2023-03-05", "https://example.com/quantum-computing", "An introduction to quantum computing, explaining fundamental principles like qubits, superposition, and entanglement.")
 Doc3 = RedditDocument("Renewable Energy Innovations", "Alice Martin", "2023-08-30", "https://example.com/renewable-energy-innovations", "This document examines the latest innovations in renewable energy technologies, including advancements in solar, wind, and geothermal energy solutions.")
 
-CorpusV2 = Corpus("NomV1")
+corpusV3 = Corpus("NomV1")
 
-CorpusV2.add(Doc1)
-CorpusV2.add(Doc2)
-CorpusV2.add(Doc3)
+corpusV3.add(Doc1)
+corpusV3.add(Doc2)
+corpusV3.add(Doc3)
 
-CorpusV2.search("quantum")
-print(CorpusV2.concorde("and"))
-CorpusV2.stats(10)
+corpusV3.search("quantum")
+print(corpusV3.concorde("and"))
+corpusV3.stats(10)
 
-print(CorpusV2.tf())
-print(CorpusV2.idf())
-print(CorpusV2.tfidf())
+print(corpusV3.tf())
+print(corpusV3.idf())
+print(corpusV3.tfidf())
 
-print(CorpusV2.searchEngine(2,"quantum computing"))
+print(corpusV3.searchEngine(2,"quantum computing"))
+
+corpusV3.timeEvolution("and")

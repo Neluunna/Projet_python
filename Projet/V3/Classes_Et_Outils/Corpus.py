@@ -6,6 +6,7 @@ import re
 import pandas as pd
 import scipy as sp
 import numpy as np
+import matplotlib.pyplot as plt
 
 class Corpus:
     def __init__(self, nom):
@@ -221,3 +222,33 @@ class Corpus:
         vecQuery= self.toVector(mots_cles)
         df_Engine= pd.DataFrame((self.compare_vectors(vecQuery,num)), columns=['Doc','score'])
         return df_Engine
+    
+    def timeEvolution(self, mot_cle=";"):
+        if mot_cle==";":
+            mot_cle= input("Veuillez entrer un mot clé ! ")
+
+        cld_mot= self.nettoyer_texte(mot_cle)
+        tf= self.tf()
+        id_mot= self.vocab[cld_mot]["unique_id"]
+        
+        scores= {}
+
+        for row, col in zip(*tf.nonzero()):
+            if col== id_mot:
+                date = self.id2doc[row + 1].__getDate__()
+                if date in scores:
+                    scores[date] += tf[row, col]
+                else:
+                    scores[date] = tf[row, col]
+        
+        df = pd.DataFrame(list(scores.items()), columns=["Date", "Occurrences"])
+        df = df.sort_values("Date")
+
+        plt.figure(figsize=(10, 5))
+        plt.plot(df["Date"], df["Occurrences"], marker="o", linestyle="-", label=f"'{mot_cle}'")
+        plt.title(f"Évolution temporelle du mot '{mot_cle}'")
+        plt.xlabel("Date")
+        plt.ylabel("Occurrences")
+        plt.grid(True)
+        plt.legend()
+        plt.show()
